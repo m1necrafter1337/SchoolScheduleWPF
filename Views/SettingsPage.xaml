@@ -1,0 +1,69 @@
+﻿<Page x:Class="SchoolSchedule.Views.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource AppBg}"
+      Title="Настройки">
+    <ScrollViewer>
+        <StackPanel Margin="24" MaxWidth="500" HorizontalAlignment="Left">
+
+            <!-- Тема -->
+            <TextBlock Text="Тема оформления" FontSize="16" FontWeight="Bold"
+                 Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,8"/>
+            <Border Background="{DynamicResource CardBg}"
+              BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+              Padding="16" CornerRadius="6" Margin="0,0,0,20">
+                <StackPanel>
+                    <RadioButton x:Name="RadioLight"  Content="Светлая"  GroupName="Theme"
+                       Margin="0,4" FontSize="14" Checked="OnThemeChanged"
+                       Foreground="{DynamicResource TextPrimary}"/>
+                    <RadioButton x:Name="RadioDark"   Content="Тёмная"   GroupName="Theme"
+                       Margin="0,4" FontSize="14" Checked="OnThemeChanged"
+                       Foreground="{DynamicResource TextPrimary}"/>
+                    <RadioButton x:Name="RadioSystem" Content="Системная" GroupName="Theme"
+                       Margin="0,4" FontSize="14" Checked="OnThemeChanged"
+                       Foreground="{DynamicResource TextPrimary}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- База данных -->
+            <TextBlock Text="База данных" FontSize="16" FontWeight="Bold"
+                 Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,8"/>
+            <Border Background="{DynamicResource CardBg}"
+              BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+              Padding="16" CornerRadius="6">
+                <StackPanel>
+
+                    <TextBlock Text="Экспорт — сохранить текущую БД в файл для переноса."
+                     FontSize="13" TextWrapping="Wrap"
+                     Foreground="{DynamicResource TextSecondary}"/>
+                    <Button Content="📤  Экспорт БД" Click="OnExportClicked"
+                  Padding="12,8" FontSize="13" Margin="0,6,0,0"
+                  Background="#4A90D9" Foreground="White" BorderThickness="0"
+                  HorizontalAlignment="Left" Cursor="Hand"/>
+
+                    <Separator Margin="0,12" Background="{DynamicResource SepBrush}"/>
+
+                    <TextBlock Text="Импорт — загрузить БД из файла. Текущие данные будут заменены."
+                     FontSize="13" TextWrapping="Wrap"
+                     Foreground="{DynamicResource TextSecondary}"/>
+                    <Button Content="📥  Импорт БД" Click="OnImportClicked"
+                  Padding="12,8" FontSize="13" Margin="0,6,0,0"
+                  Background="#4A90D9" Foreground="White" BorderThickness="0"
+                  HorizontalAlignment="Left" Cursor="Hand"/>
+
+                    <Separator Margin="0,12" Background="{DynamicResource SepBrush}"/>
+
+                    <TextBlock Text="Сброс — удалить текущую БД и восстановить из резервной копии."
+                     FontSize="13" TextWrapping="Wrap"
+                     Foreground="{DynamicResource TextSecondary}"/>
+                    <Button Content="🔄  Сбросить БД" Click="OnResetClicked"
+                  Padding="12,8" FontSize="13" Margin="0,6,0,0"
+                  Background="#CC3333" Foreground="White" BorderThickness="0"
+                  HorizontalAlignment="Left" Cursor="Hand"/>
+
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

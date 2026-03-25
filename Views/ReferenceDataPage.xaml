@@ -1,0 +1,20 @@
+﻿<Page x:Class="SchoolSchedule.Views.ReferenceDataPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource AppBg}"
+      Title="Справочники">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Вкладки -->
+        <Border Grid.Row="0" Background="{DynamicResource AppBg}" Padding="8,6">
+            <StackPanel x:Name="TabButtonsPanel" Orientation="Horizontal"/>
+        </Border>
+
+        <!-- Контент вкладки -->
+        <ContentControl Grid.Row="1" x:Name="TabContent"/>
+    </Grid>
+</Page>
