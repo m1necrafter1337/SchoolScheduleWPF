@@ -130,10 +130,12 @@ namespace SchoolSchedule.Views
                     new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Строки: заголовки, нагрузка, уроки
+            // Строки: заголовки, нагрузка, уроки
             ScheduleGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(36) });
             ScheduleGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
             foreach (var _ in lessons)
-                ScheduleGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(60) });
+                ScheduleGrid.RowDefinitions.Add(
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
             // Заголовки классов
             Add(ScheduleGrid, MakeHeader("№"), 0, 0);
@@ -223,8 +225,8 @@ namespace SchoolSchedule.Views
             {
                 var empty = new Border
                 {
-                    BorderBrush = new SolidColorBrush(borderColor),
-                    BorderThickness = new Thickness(stroke),
+                    BorderBrush = Brushes.Transparent, // без рамок
+                    BorderThickness = new Thickness(0),
                     Background = Brushes.Transparent,
                     Margin = new Thickness(1),
                     Cursor = Cursors.Hand
@@ -289,7 +291,7 @@ namespace SchoolSchedule.Views
             var itemId = cell.Items.FirstOrDefault()?.ScheduleItemId ?? 0;
             delBtn.Click += async (_, __) => await OnDeleteAsync(itemId);
 
-            var outer = new Grid { Margin = new Thickness(1) };
+            var outer = new Grid { Margin = new Thickness(0.5) };
             outer.Children.Add(cellBorder);
             outer.Children.Add(delBtn);
             return outer;

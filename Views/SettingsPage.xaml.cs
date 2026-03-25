@@ -30,16 +30,14 @@ namespace SchoolSchedule.Views
             var saved = Properties.Settings.Default.AppTheme;
             RadioLight.IsChecked = saved == "Light" || string.IsNullOrEmpty(saved);
             RadioDark.IsChecked = saved == "Dark";
-            RadioSystem.IsChecked = saved == "System";
+            RadioSystem.IsChecked = false;
             _loading = false;
         }
 
         private void OnThemeChanged(object sender, RoutedEventArgs e)
         {
             if (_loading) return;
-            string theme = RadioDark.IsChecked == true ? "Dark"
-                         : RadioSystem.IsChecked == true ? "System"
-                         : "Light";
+            string theme = RadioDark.IsChecked == true ? "Dark" : "Light";
             Properties.Settings.Default.AppTheme = theme;
             Properties.Settings.Default.Save();
             _applyTheme(theme);

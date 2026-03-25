@@ -44,6 +44,26 @@ namespace SchoolSchedule
             sc.AddSingleton<ScheduleViewModel>();
             sc.AddTransient<ReferenceDataViewModel>();
             Services = sc.BuildServiceProvider();
+
+            
+            var savedTheme = Properties.Settings.Default.AppTheme;
+            if (string.IsNullOrEmpty(savedTheme))
+                savedTheme = "Light";
+
+            var dict = new ResourceDictionary();
+            dict.Source = savedTheme == "Dark"
+                ? new Uri("pack://application:,,,/Themes/DarkTheme.xaml")
+                : new Uri("pack://application:,,,/Themes/LightTheme.xaml");
+
+            Resources.MergedDictionaries.Clear();
+            Resources.MergedDictionaries.Add(dict);
+
+            var styles = new ResourceDictionary
+            {
+                Source = new Uri("pack://application:,,,/Styles/Styles.xaml")
+            };
+            Resources.MergedDictionaries.Add(styles);
+
         }
     }
 }

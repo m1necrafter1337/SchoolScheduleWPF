@@ -102,7 +102,7 @@ namespace SchoolSchedule.Views
         private UIElement BuildRoomsTab()
         {
             var sp = new StackPanel { Margin = new Thickness(16) };
-            var addBtn = MakeAddButton("?  Добавить кабинет");
+            var addBtn = MakeAddButton("Добавить кабинет");
             addBtn.Click += async (_, __) =>
             {
                 var dlg = new InputDialog("Добавить кабинет", "Номер кабинета:");
@@ -133,7 +133,7 @@ namespace SchoolSchedule.Views
         private UIElement BuildTeachersTab()
         {
             var sp = new StackPanel { Margin = new Thickness(16) };
-            var addBtn = MakeAddButton("?  Добавить учителя");
+            var addBtn = MakeAddButton("Добавить учителя");
             addBtn.Click += async (_, __) =>
             {
                 var d1 = new InputDialog("Добавить учителя", "Фамилия:");
@@ -173,7 +173,7 @@ namespace SchoolSchedule.Views
         private UIElement BuildSubjectsTab()
         {
             var sp = new StackPanel { Margin = new Thickness(16) };
-            var addBtn = MakeAddButton("?  Добавить предмет");
+            var addBtn = MakeAddButton("Добавить предмет");
             addBtn.Click += async (_, __) =>
             {
                 var dlg = new InputDialog("Добавить предмет", "Название предмета:");
@@ -204,7 +204,7 @@ namespace SchoolSchedule.Views
         private UIElement BuildAssignmentsTab()
         {
             var sp = new StackPanel { Margin = new Thickness(16) };
-            var addBtn = MakeAddButton("?  Добавить назначение");
+            var addBtn = MakeAddButton("Добавить назначение");
             addBtn.Click += async (_, __) =>
             {
                 await _vm.AddAssignmentWpfAsync();
@@ -231,7 +231,7 @@ namespace SchoolSchedule.Views
 
                 var delBtn = new Button
                 {
-                    Content = "??? Удалить",
+                    Content = "Удалить",
                     FontSize = 11,
                     Padding = new Thickness(8, 4, 8, 4),
                     Margin = new Thickness(0, 6, 0, 0),
@@ -354,7 +354,7 @@ namespace SchoolSchedule.Views
 
             var btn = new Button
             {
-                Content = "???",
+                Content = "X",
                 FontSize = 15,
                 Width = 38,
                 Height = 38,

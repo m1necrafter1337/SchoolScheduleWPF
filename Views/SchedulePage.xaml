@@ -9,7 +9,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Заголовок с названием дня -->
+        <!-- Заголовок -->
         <Border Grid.Row="0" Background="{DynamicResource CardBg}"
             BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1"
             Padding="16,10">
@@ -28,30 +28,27 @@
             </Grid>
         </Border>
 
-        <!-- Кнопки дней недели -->
+        <!-- Кнопки дней -->
         <Border Grid.Row="1" Background="{DynamicResource AppBg}" Padding="8,6">
             <StackPanel x:Name="DayButtonsPanel" Orientation="Horizontal"/>
         </Border>
 
-        <!-- Сетка расписания + боковая панель -->
+        <!-- Сетка + боковая панель -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition x:Name="SidePanelCol" Width="0"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Сетка -->
-            <ScrollViewer Grid.Column="0"
-                    HorizontalScrollBarVisibility="Auto"
-                    VerticalScrollBarVisibility="Auto">
-                <Grid x:Name="ScheduleGrid" Margin="4"/>
-            </ScrollViewer>
+            <!-- Сетка БЕЗ скролла, растянута на всю область -->
+            <Grid x:Name="ScheduleGrid" Grid.Column="0" Margin="4"/>
 
             <!-- Боковая панель -->
             <Border Grid.Column="1" x:Name="SidePanel"
               Background="{DynamicResource CardBg}"
               BorderBrush="{DynamicResource BorderBrush}"
-              BorderThickness="1,0,0,0"
+              BorderThickness="1,1,0,0"
+              Margin="0,0,0,0"     
               Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -59,7 +56,6 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Шапка панели -->
                     <Border Grid.Row="0" Background="#1A4A90D9" Padding="12,8">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -78,8 +74,9 @@
                         </Grid>
                     </Border>
 
-                    <!-- Список назначений для выбора -->
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <!-- Скролл без видимого бара -->
+                    <ScrollViewer Grid.Row="1"
+                        VerticalScrollBarVisibility="Hidden">
                         <StackPanel x:Name="AssignmentsList" Margin="6"/>
                     </ScrollViewer>
                 </Grid>
