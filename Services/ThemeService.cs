@@ -9,7 +9,7 @@ namespace SchoolSchedule.Services
         public static bool IsDark { get; private set; }
 
         // Событие — срабатывает когда тема меняется
-        public static event Action ThemeChanged;
+        public static event Action? ThemeChanged;
 
         // Главный метод смены темы
         public static void Apply(bool dark)

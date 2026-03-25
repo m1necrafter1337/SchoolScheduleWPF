@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using SchoolSchedule.Services;
 
 namespace SchoolSchedule
 {
@@ -16,7 +17,7 @@ namespace SchoolSchedule
 
         private readonly SchedulePage _schedulePage = new SchedulePage();
         private readonly ReferenceDataPage _referencePage = new ReferenceDataPage();
-        private SettingsPage _settingsPage;
+        private SettingsPage? _settingsPage;
 
         public MainWindow()
         {
