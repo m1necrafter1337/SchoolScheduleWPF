@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SchoolSchedule.Data;
 using SchoolSchedule.Services;
 using SchoolSchedule.ViewModels;
+using SchoolSchedule.Properties;
 
 namespace SchoolSchedule
 {
@@ -45,8 +46,10 @@ namespace SchoolSchedule
             sc.AddTransient<ReferenceDataViewModel>();
             Services = sc.BuildServiceProvider();
 
-            
-            var savedTheme = Properties.Settings.Default.AppTheme;
+
+            var savedTheme = Settings.Default.AppTheme;
+            if (string.IsNullOrEmpty(savedTheme))
+                savedTheme = "Light";
             if (string.IsNullOrEmpty(savedTheme))
                 savedTheme = "Light";
 
