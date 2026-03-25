@@ -1,4 +1,4 @@
-﻿namespace SchoolSchedule.Services;
+namespace SchoolSchedule.Services;
 
 public interface IAppRefreshable
 {

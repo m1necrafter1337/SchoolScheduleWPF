@@ -1,4 +1,4 @@
-ï»¿using System.Linq;
+using System.Linq;
 
 namespace SchoolSchedule.Helpers
 {
@@ -6,7 +6,7 @@ namespace SchoolSchedule.Helpers
     {
         public static readonly string[] DayNames =
         {
-            "ÐŸÐ¾Ð½ÐµÐ´ÐµÐ»ÑŒÐ½Ð¸Ðº", "Ð’Ñ‚Ð¾Ñ€Ð½Ð¸Ðº", "Ð¡Ñ€ÐµÐ´Ð°", "Ð§ÐµÑ‚Ð²ÐµÑ€Ð³", "ÐŸÑÑ‚Ð½Ð¸Ñ†Ð°", "Ð¡ÑƒÐ±Ð±Ð¾Ñ‚Ð°"
+            "Ïîíåäåëüíèê", "Âòîðíèê", "Ñðåäà", "×åòâåðã", "Ïÿòíèöà", "Ñóááîòà"
         };
 
         public static string GetName(int dayIndex) =>

@@ -1,4 +1,4 @@
-п»їusing SQLite;
+using SQLite;
 using SchoolSchedule.Data.Models;
 
 namespace SchoolSchedule.Data;
@@ -21,7 +21,7 @@ public class AppDatabase
         await _semaphore.WaitAsync();
         try
         {
-            // СѓР±СЂР°С‚СЊ: if (_instance != null) return;
+            // убрать: if (_instance != null) return;
             var db = new AppDatabase(dbPath);
             _instance = db;
         }
@@ -31,7 +31,7 @@ public class AppDatabase
         }
     }
 
-    // в”Ђв”Ђ РџСѓР±Р»РёС‡РЅС‹Рµ РјРµС‚РѕРґС‹ РґРѕСЃС‚СѓРїР° Рє РґР°РЅРЅС‹Рј в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+    // -- Публичные методы доступа к данным ------------------------------
 
     public SQLiteAsyncConnection Connection => _db;
 
@@ -118,7 +118,7 @@ public class AppDatabase
             ? await _db.InsertAsync(item) 
             : await _db.UpdateAsync(item);
         
-        // РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ С„Р»РµС€РёРј РґР°РЅРЅС‹Рµ РЅР° РґРёСЃРє
+        // Принудительно флешим данные на диск
         await _db.ExecuteAsync("PRAGMA synchronous = NORMAL");
         
         return result;
@@ -138,7 +138,7 @@ public class AppDatabase
             ClassName = classes.TryGetValue(a.ClassId, out var cls) ? cls.DisplayName : "?",
             SubjectName = subjects.TryGetValue(a.SubjectId, out var subj) ? subj.Name : "?",
             TeacherName = teachers.TryGetValue(a.TeacherId, out var teacher) ? teacher.FullName : "?",
-            RoomNumber = a.RoomId.HasValue && rooms.TryGetValue(a.RoomId.Value, out var room) ? room.Number : "вЂ”"
+            RoomNumber = a.RoomId.HasValue && rooms.TryGetValue(a.RoomId.Value, out var room) ? room.Number : "—"
         }).ToList();
     }
     public Task<int> DeleteRoomAsync(Room room) => _db.DeleteAsync(room);

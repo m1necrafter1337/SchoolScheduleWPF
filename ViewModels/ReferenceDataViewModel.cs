@@ -1,4 +1,4 @@
-п»їusing System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -117,20 +117,20 @@ namespace SchoolSchedule.ViewModels
         public async Task AddAssignmentWpfAsync()
         {
             var classes = await _db.GetClassesAsync();
-            if (classes.Count == 0) { MessageBox.Show("РќРµС‚ РєР»Р°СЃСЃРѕРІ РІ Р±Р°Р·Рµ."); return; }
-            var d1 = new SelectionDialog("Р’С‹Р±РµСЂРёС‚Рµ РєР»Р°СЃСЃ", "РљР»Р°СЃСЃ:", classes.Select(c => c.DisplayName));
+            if (classes.Count == 0) { MessageBox.Show("Нет классов в базе."); return; }
+            var d1 = new SelectionDialog("Выберите класс", "Класс:", classes.Select(c => c.DisplayName));
             if (d1.ShowDialog() != true) return;
             var cls = classes.First(c => c.DisplayName == d1.SelectedItem);
 
             var subjects = await _db.GetSubjectsAsync();
-            if (subjects.Count == 0) { MessageBox.Show("РќРµС‚ РїСЂРµРґРјРµС‚РѕРІ РІ Р±Р°Р·Рµ."); return; }
-            var d2 = new SelectionDialog("Р’С‹Р±РµСЂРёС‚Рµ РїСЂРµРґРјРµС‚", "РџСЂРµРґРјРµС‚:", subjects.Select(s => s.Name));
+            if (subjects.Count == 0) { MessageBox.Show("Нет предметов в базе."); return; }
+            var d2 = new SelectionDialog("Выберите предмет", "Предмет:", subjects.Select(s => s.Name));
             if (d2.ShowDialog() != true) return;
             var subj = subjects.First(s => s.Name == d2.SelectedItem);
 
             var teachers = await _db.GetTeachersAsync();
-            if (teachers.Count == 0) { MessageBox.Show("РќРµС‚ СѓС‡РёС‚РµР»РµР№ РІ Р±Р°Р·Рµ."); return; }
-            var d3 = new SelectionDialog("Р’С‹Р±РµСЂРёС‚Рµ СѓС‡РёС‚РµР»СЏ", "РЈС‡РёС‚РµР»СЊ:", teachers.Select(t => t.FullName));
+            if (teachers.Count == 0) { MessageBox.Show("Нет учителей в базе."); return; }
+            var d3 = new SelectionDialog("Выберите учителя", "Учитель:", teachers.Select(t => t.FullName));
             if (d3.ShowDialog() != true) return;
             var teacher = teachers.First(t => t.FullName == d3.SelectedItem);
 
@@ -138,9 +138,9 @@ namespace SchoolSchedule.ViewModels
             int? roomId = null;
             if (rooms.Count > 0)
             {
-                var roomItems = new[] { "РќРµ РІС‹Р±РёСЂР°С‚СЊ" }.Concat(rooms.Select(r => r.Number));
-                var d4 = new SelectionDialog("Р’С‹Р±РµСЂРёС‚Рµ РєР°Р±РёРЅРµС‚", "РљР°Р±РёРЅРµС‚:", roomItems);
-                if (d4.ShowDialog() == true && d4.SelectedItem != "РќРµ РІС‹Р±РёСЂР°С‚СЊ" && d4.SelectedItem != null)
+                var roomItems = new[] { "Не выбирать" }.Concat(rooms.Select(r => r.Number));
+                var d4 = new SelectionDialog("Выберите кабинет", "Кабинет:", roomItems);
+                if (d4.ShowDialog() == true && d4.SelectedItem != "Не выбирать" && d4.SelectedItem != null)
                     roomId = rooms.First(r => r.Number == d4.SelectedItem).Id;
             }
 
@@ -154,7 +154,7 @@ namespace SchoolSchedule.ViewModels
             await _db.SaveAssignmentAsync(asg);
             Assignments.Add(asg);
             await RefreshConflictsAsync();
-            MessageBox.Show("РќР°Р·РЅР°С‡РµРЅРёРµ РґРѕР±Р°РІР»РµРЅРѕ.", "РЈСЃРїРµС…");
+            MessageBox.Show("Назначение добавлено.", "Успех");
         }
     }
 

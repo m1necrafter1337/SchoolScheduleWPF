@@ -1,4 +1,4 @@
-п»їusing SchoolSchedule.Views;
+using SchoolSchedule.Views;
 using System;
 using System.Configuration;
 using System.Windows;
@@ -53,7 +53,7 @@ namespace SchoolSchedule
             Application.Current.Resources.MergedDictionaries.Clear();
             Application.Current.Resources.MergedDictionaries.Add(dict);
 
-            // РџРµСЂРµРїРѕРґРєР»СЋС‡Р°РµРј СЃС‚РёР»Рё РїРѕСЃР»Рµ СЃРјРµРЅС‹ С‚РµРјС‹
+            // Переподключаем стили после смены темы
             var styles = new ResourceDictionary
             {
                 Source = new Uri("pack://application:,,,/Styles/Styles.xaml")
