@@ -16,7 +16,7 @@ namespace SchoolSchedule
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
+            ThemeService.ApplySaved();
             var dbPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "SchoolSchedule", "dbSchool.db");

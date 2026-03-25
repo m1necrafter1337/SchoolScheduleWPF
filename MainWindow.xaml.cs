@@ -3,11 +3,17 @@ using System;
 using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace SchoolSchedule
 {
     public partial class MainWindow : Window
     {
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
         private readonly SchedulePage _schedulePage = new SchedulePage();
         private readonly ReferenceDataPage _referencePage = new ReferenceDataPage();
         private SettingsPage _settingsPage;
@@ -15,8 +21,16 @@ namespace SchoolSchedule
         public MainWindow()
         {
             InitializeComponent();
-            _settingsPage = new SettingsPage(ApplyTheme);
-            Navigate(0);
+            ThemeService.ThemeChanged += ApplyTitleBarTheme;
+            Loaded += (_, __) => ApplyTitleBarTheme();
+        }
+
+        private void ApplyTitleBarTheme()
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            if (hwnd == IntPtr.Zero) return;
+            int isDark = ThemeService.IsDark ? 1 : 0;
+            DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref isDark, sizeof(int));
         }
 
         private void NavBtn_Click(object sender, RoutedEventArgs e)

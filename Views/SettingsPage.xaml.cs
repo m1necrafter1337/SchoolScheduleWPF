@@ -43,6 +43,11 @@ namespace SchoolSchedule.Views
             _applyTheme(theme);
         }
 
+        private void OnThemeToggled(object sender, RoutedEventArgs e)
+        {
+            ThemeService.Apply(DarkToggle.IsChecked == true);
+        }
+
         private void OnExportClicked(object sender, RoutedEventArgs e)
         {
             if (!File.Exists(DbPath))

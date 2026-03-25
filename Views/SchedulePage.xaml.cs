@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+п»їusing System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +19,9 @@ namespace SchoolSchedule.Views
         private readonly AppDatabase _db;
         private readonly ScheduleService _svc;
         private readonly AppDataChangedNotifier _notifier;
+
+        private readonly SolidColorBrush _gridBorder = new SolidColorBrush(Color.FromRgb(0xCC, 0xDD, 0xF0));
+        private readonly SolidColorBrush _headerBg = new SolidColorBrush(Color.FromRgb(0x2A, 0x52, 0x98));
 
         private int _selectedClassId;
         private int _selectedLesson;
@@ -61,7 +63,7 @@ namespace SchoolSchedule.Views
         private void SetBusy(bool busy)
             => BusyIndicator.Visibility = busy ? Visibility.Visible : Visibility.Collapsed;
 
-        // -- Кнопки дней ---------------------------------------------
+        // -- РљРЅРѕРїРєРё РґРЅРµР№ ---------------------------------------------
 
         private void BuildDayButtons()
         {
@@ -109,7 +111,7 @@ namespace SchoolSchedule.Views
             }
         }
 
-        // -- Сетка расписания -----------------------------------------
+        // -- РЎРµС‚РєР° СЂР°СЃРїРёСЃР°РЅРёСЏ -----------------------------------------
 
         private void BuildGrid()
         {
@@ -123,45 +125,54 @@ namespace SchoolSchedule.Views
             var classes = _vm.Classes.ToList();
             var lessons = _vm.LessonNumbers;
 
-            // Колонки: номер урока + по одной на класс
+            // РљРѕР»РѕРЅРєРё
             ScheduleGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(36) });
             foreach (var _ in classes)
                 ScheduleGrid.ColumnDefinitions.Add(
                     new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-            // Строки: заголовки, нагрузка, уроки
-            // Строки: заголовки, нагрузка, уроки
+            // РЎС‚СЂРѕРєРё
             ScheduleGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(36) });
-            ScheduleGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
+            ScheduleGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24) });
             foreach (var _ in lessons)
-                ScheduleGrid.RowDefinitions.Add(
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                ScheduleGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(57) });
 
-            // Заголовки классов
-            Add(ScheduleGrid, MakeHeader("№"), 0, 0);
+            // Р—Р°РіРѕР»РѕРІРєРё
+            Add(ScheduleGrid, MakeHeader("в„–"), 0, 0);
             for (int col = 0; col < classes.Count; col++)
                 Add(ScheduleGrid, MakeHeader(classes[col].DisplayName), col + 1, 0);
 
-            // Строка нагрузки
-            Add(ScheduleGrid, new Border { Background = HeaderBrush() }, 0, 1);
+            // РЎС‚СЂРѕРєР° РЅР°РіСЂСѓР·РєРё
+            Add(ScheduleGrid, new Border
+            {
+                Background = _headerBg,
+                BorderBrush = _gridBorder,
+                BorderThickness = new Thickness(1)
+            }, 0, 1);
+
             for (int col = 0; col < classes.Count; col++)
             {
                 var cls = classes[col];
                 var exceeded = _vm.IsWeekLoadExceeded(cls.Id);
-                Add(ScheduleGrid, new TextBlock
+                Add(ScheduleGrid, new Border
                 {
-                    Text = _vm.GetWeekLoadText(cls.Id),
-                    FontSize = 10,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    TextAlignment = TextAlignment.Center,
-                    Foreground = new SolidColorBrush(exceeded
-                        ? Color.FromRgb(0xFF, 0x45, 0x00)
-                        : Color.FromRgb(0x88, 0x88, 0x88))
+                    BorderBrush = _gridBorder,
+                    BorderThickness = new Thickness(1),
+                    Child = new TextBlock
+                    {
+                        Text = _vm.GetWeekLoadText(cls.Id),
+                        FontSize = 10,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        TextAlignment = TextAlignment.Center,
+                        Foreground = new SolidColorBrush(exceeded
+                            ? Color.FromRgb(0xFF, 0x45, 0x00)
+                            : Color.FromRgb(0x88, 0x88, 0x88))
+                    }
                 }, col + 1, 1);
             }
 
-            // Ячейки уроков
+            // РЇС‡РµР№РєРё СѓСЂРѕРєРѕРІ
             for (int row = 0; row < lessons.Count; row++)
             {
                 int lesson = lessons[row];
@@ -181,12 +192,11 @@ namespace SchoolSchedule.Views
             g.Children.Add(el);
         }
 
-        private static SolidColorBrush HeaderBrush()
-            => new SolidColorBrush(Color.FromRgb(0x2A, 0x52, 0x98));
-
-        private static UIElement MakeHeader(string text) => new Border
+        private UIElement MakeHeader(string text) => new Border
         {
-            Background = HeaderBrush(),
+            Background = _headerBg,
+            BorderBrush = _gridBorder,
+            BorderThickness = new Thickness(1),
             Child = new TextBlock
             {
                 Text = text,
@@ -200,9 +210,11 @@ namespace SchoolSchedule.Views
             Padding = new Thickness(2)
         };
 
-        private static UIElement MakeLessonNum(int n) => new Border
+        private UIElement MakeLessonNum(int n) => new Border
         {
-            Background = HeaderBrush(),
+            Background = _headerBg,
+            BorderBrush = _gridBorder,
+            BorderThickness = new Thickness(1),
             Child = new TextBlock
             {
                 Text = n.ToString(),
@@ -216,24 +228,24 @@ namespace SchoolSchedule.Views
 
         private UIElement MakeCell(CellData cell, int classId, int lessonNumber)
         {
-            var borderColor = cell.HasConflict
-                ? Color.FromRgb(0xD4, 0xAF, 0x37)
-                : Color.FromRgb(0xBB, 0xCC, 0xEE);
-            double stroke = cell.HasConflict ? 2.0 : 0.5;
-
             if (cell.IsEmpty)
             {
                 var empty = new Border
                 {
-                    BorderBrush = Brushes.Transparent, // без рамок
-                    BorderThickness = new Thickness(0),
+                    BorderBrush = _gridBorder,
+                    BorderThickness = new Thickness(1),
                     Background = Brushes.Transparent,
-                    Margin = new Thickness(1),
+                    Margin = new Thickness(0),
                     Cursor = Cursors.Hand
                 };
                 empty.MouseLeftButtonUp += (_, __) => OnCellTapped(classId, lessonNumber);
                 return empty;
             }
+
+            var borderColor = cell.HasConflict
+                ? Color.FromRgb(0xD4, 0xAF, 0x37)
+                : Color.FromRgb(0xBB, 0xCC, 0xEE);
+            double stroke = cell.HasConflict ? 2.0 : 0.5;
 
             var stack = new StackPanel { Margin = new Thickness(3, 2, 3, 2) };
             foreach (var item in cell.Items)
@@ -255,7 +267,7 @@ namespace SchoolSchedule.Views
                 });
                 stack.Children.Add(new TextBlock
                 {
-                    Text = $"каб. {item.RoomNumber}",
+                    Text = $"РєР°Р±. {item.RoomNumber}",
                     FontSize = 9,
                     Foreground = new SolidColorBrush(Color.FromRgb(0x77, 0x77, 0x77))
                 });
@@ -274,7 +286,7 @@ namespace SchoolSchedule.Views
 
             var delBtn = new Button
             {
-                Content = "?",
+                Content = "X",
                 FontSize = 9,
                 Width = 18,
                 Height = 18,
@@ -286,25 +298,25 @@ namespace SchoolSchedule.Views
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(0, 2, 2, 0),
                 Cursor = Cursors.Hand,
-                ToolTip = "Удалить урок"
+                ToolTip = "РЈРґР°Р»РёС‚СЊ СѓСЂРѕРє"
             };
             var itemId = cell.Items.FirstOrDefault()?.ScheduleItemId ?? 0;
             delBtn.Click += async (_, __) => await OnDeleteAsync(itemId);
 
-            var outer = new Grid { Margin = new Thickness(0.5) };
+            var outer = new Grid { Margin = new Thickness(0) };
             outer.Children.Add(cellBorder);
             outer.Children.Add(delBtn);
             return outer;
         }
 
-        // -- Боковая панель -------------------------------------------
+        // -- Р‘РѕРєРѕРІР°СЏ РїР°РЅРµР»СЊ -------------------------------------------
 
         private async void OnCellTapped(int classId, int lessonNumber)
         {
             _selectedClassId = classId;
             _selectedLesson = lessonNumber;
             var cls = _vm.Classes.FirstOrDefault(c => c.Id == classId);
-            PanelTitle.Text = $"Класс {cls?.DisplayName} — Урок {lessonNumber}";
+            PanelTitle.Text = $"РљР»Р°СЃСЃ {cls?.DisplayName} вЂ” РЈСЂРѕРє {lessonNumber}";
             await LoadAssignmentsPanelAsync(classId, lessonNumber);
             SidePanel.Visibility = Visibility.Visible;
             SidePanelCol.Width = new GridLength(220);
@@ -320,7 +332,7 @@ namespace SchoolSchedule.Views
                 {
                     AssignmentsList.Children.Add(new TextBlock
                     {
-                        Text = "Урок уже заполнен.\nУдалите его крестиком в ячейке.",
+                        Text = "РЈСЂРѕРє СѓР¶Рµ Р·Р°РїРѕР»РЅРµРЅ.\nРЈРґР°Р»РёС‚Рµ РµРіРѕ РєСЂРµСЃС‚РёРєРѕРј РІ СЏС‡РµР№РєРµ.",
                         FontSize = 12,
                         TextWrapping = TextWrapping.Wrap,
                         Foreground = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88)),
@@ -335,7 +347,7 @@ namespace SchoolSchedule.Views
                 {
                     AssignmentsList.Children.Add(new TextBlock
                     {
-                        Text = "Нет назначений для этого класса",
+                        Text = "РќРµС‚ РЅР°Р·РЅР°С‡РµРЅРёР№ РґР»СЏ СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°",
                         FontSize = 12,
                         TextWrapping = TextWrapping.Wrap,
                         Foreground = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88)),
@@ -371,7 +383,7 @@ namespace SchoolSchedule.Views
                     if (room != null)
                         sp.Children.Add(new TextBlock
                         {
-                            Text = $"каб. {room.Number}",
+                            Text = $"РєР°Р±. {room.Number}",
                             FontSize = 10,
                             Foreground = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88))
                         });
@@ -396,7 +408,7 @@ namespace SchoolSchedule.Views
             {
                 AssignmentsList.Children.Add(new TextBlock
                 {
-                    Text = $"Ошибка: {ex.Message}",
+                    Text = $"РћС€РёР±РєР°: {ex.Message}",
                     FontSize = 11,
                     Foreground = Brushes.Red,
                     Margin = new Thickness(8)
@@ -415,11 +427,11 @@ namespace SchoolSchedule.Views
 
             if (result.Error != null)
             {
-                MessageBox.Show(result.Error, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(result.Error, "РћС€РёР±РєР°", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             if (result.Warning != null)
-                MessageBox.Show(result.Warning, "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(result.Warning, "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             SetBusy(true);
             await _vm.RefreshScheduleAsync();
@@ -432,7 +444,7 @@ namespace SchoolSchedule.Views
         private async Task OnDeleteAsync(int id)
         {
             if (id == 0) return;
-            if (MessageBox.Show("Удалить урок?", "Удалить",
+            if (MessageBox.Show("РЈРґР°Р»РёС‚СЊ СѓСЂРѕРє?", "РЈРґР°Р»РёС‚СЊ",
                 MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
 
             var all = await _db.GetAllScheduleItemsAsync();

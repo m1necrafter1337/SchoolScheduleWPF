@@ -6,7 +6,7 @@ namespace SchoolSchedule.Services
 {
     public class AppDataChangedNotifier
     {
-        public event Func<Task> DataChanged;
+        public event Func<Task>? DataChanged;
 
         public async Task NotifyDataChangedAsync()
         {
