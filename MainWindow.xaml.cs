@@ -1,6 +1,5 @@
 using SchoolSchedule.Views;
 using System;
-using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Runtime.InteropServices;
@@ -23,8 +22,14 @@ namespace SchoolSchedule
         {
             InitializeComponent();
             ThemeService.ThemeChanged += ApplyTitleBarTheme;
-            Loaded += (_, __) => ApplyTitleBarTheme();
+            Loaded += (_, __) =>
+            {
+                ApplyTitleBarTheme();
+                Navigate(0); // открываем расписание по умолчанию
+            };
         }
+
+        // -- Тёмный titlebar ------------------------------------------
 
         private void ApplyTitleBarTheme()
         {
@@ -33,6 +38,21 @@ namespace SchoolSchedule
             int isDark = ThemeService.IsDark ? 1 : 0;
             DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref isDark, sizeof(int));
         }
+
+        // -- Системные кнопки -----------------------------------------
+
+        private void BtnMinimize_Click(object sender, RoutedEventArgs e)
+            => WindowState = WindowState.Minimized;
+
+        private void BtnMaximize_Click(object sender, RoutedEventArgs e)
+            => WindowState = WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+            => Close();
+
+        // -- Навигация ------------------------------------------------
 
         private void NavBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -45,7 +65,7 @@ namespace SchoolSchedule
             MainFrame.Navigate(idx switch
             {
                 1 => (object)_referencePage,
-                2 => _settingsPage,
+                2 => _settingsPage ??= new SettingsPage(ApplyTheme),
                 _ => _schedulePage
             });
 
@@ -58,22 +78,26 @@ namespace SchoolSchedule
             }
         }
 
+        // -- Смена темы -----------------------------------------------
+
         private void ApplyTheme(string theme)
         {
-            var dict = new ResourceDictionary();
-            dict.Source = theme == "Dark"
-                ? new Uri("pack://application:,,,/Themes/DarkTheme.xaml")
-                : new Uri("pack://application:,,,/Themes/LightTheme.xaml");
+            var dict = new ResourceDictionary
+            {
+                Source = theme == "Dark"
+                    ? new Uri("pack://application:,,,/Themes/DarkTheme.xaml")
+                    : new Uri("pack://application:,,,/Themes/LightTheme.xaml")
+            };
 
-            Application.Current.Resources.MergedDictionaries.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
+            var merged = Application.Current.Resources.MergedDictionaries;
+            merged.Clear();
+            merged.Add(dict);
 
-            // Переподключаем стили после смены темы
             var styles = new ResourceDictionary
             {
                 Source = new Uri("pack://application:,,,/Styles/Styles.xaml")
             };
-            Application.Current.Resources.MergedDictionaries.Add(styles);
+            merged.Add(styles);
         }
     }
 }

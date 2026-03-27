@@ -3,10 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="SchoolSchedule" Height="700" Width="1100"
         MinHeight="500" MinWidth="700"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResizeWithGrip"
         Background="{DynamicResource AppBg}"
         Icon="Assets/appicon.ico">
+
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="32" GlassFrameThickness="1" UseAeroCaptionButtons="True"/>
+        <WindowChrome CaptionHeight="40"
+                      GlassFrameThickness="0,0,0,0"
+                      ResizeBorderThickness="4"
+                      UseAeroCaptionButtons="False"/>
     </WindowChrome.WindowChrome>
 
     <Grid>
@@ -15,22 +21,56 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Навигационная панель -->
         <Border Grid.Row="0" Background="{DynamicResource NavBg}"
-            BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
-            <StackPanel x:Name="NavPanel" Orientation="Horizontal" Margin="8,4">
-                <Button x:Name="BtnSchedule"  Content="📅  Расписание"  Click="NavBtn_Click" Tag="0"
-                Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0"/>
-                <Button x:Name="BtnReference" Content="📚  Справочники" Click="NavBtn_Click" Tag="1"
-                Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0"/>
-                <Button x:Name="BtnSettings"  Content="⚙️  Настройки"   Click="NavBtn_Click" Tag="2"
-                Style="{StaticResource NavButtonStyle}"/>
-            </StackPanel>
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="0,0,0,1" Height="40">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel x:Name="NavPanel" Grid.Column="0"
+                            Orientation="Horizontal" Margin="8,0"
+                            VerticalAlignment="Center">
+                    <Button x:Name="BtnSchedule" Content="📅  Расписание" Click="NavBtn_Click" Tag="0"
+                            Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0"
+                            WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <Button x:Name="BtnReference" Content="📚  Справочники" Click="NavBtn_Click" Tag="1"
+                            Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0"
+                            WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <Button x:Name="BtnSettings" Content="⚙️  Настройки" Click="NavBtn_Click" Tag="2"
+                            Style="{StaticResource NavButtonStyle}"
+                            WindowChrome.IsHitTestVisibleInChrome="True"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="─" Width="46" Height="40"
+                            Click="BtnMinimize_Click"
+                            Foreground="{DynamicResource TextPrimary}"
+                            Background="Transparent" BorderThickness="0" FontSize="14"
+                            VerticalContentAlignment="Center"
+                            WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <Button Content="□" Width="46" Height="40"
+                            Click="BtnMaximize_Click"
+                            Foreground="{DynamicResource TextPrimary}"
+                            Background="Transparent" BorderThickness="0" FontSize="14"
+                            VerticalContentAlignment="Center"
+                            WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <Button Content="✕" Width="46" Height="40"
+                            Click="BtnClose_Click"
+                            Foreground="{DynamicResource TextPrimary}"
+                            Background="Transparent" BorderThickness="0" FontSize="14"
+                            VerticalContentAlignment="Center"
+                            WindowChrome.IsHitTestVisibleInChrome="True"/>
+                </StackPanel>
+
+            </Grid>
         </Border>
 
-        <!-- Контентная область -->
         <Frame x:Name="MainFrame" Grid.Row="1"
-           NavigationUIVisibility="Hidden"
-           Background="{DynamicResource AppBg}"/>
+               NavigationUIVisibility="Hidden"
+               Background="{DynamicResource AppBg}"/>
+
     </Grid>
 </Window>
